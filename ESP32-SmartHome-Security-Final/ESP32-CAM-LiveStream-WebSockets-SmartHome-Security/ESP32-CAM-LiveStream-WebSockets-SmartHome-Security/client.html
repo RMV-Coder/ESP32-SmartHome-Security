@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SmartHome Security</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+            }
+            #wrapper {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            header {
+                background-color: #505050;
+                color: white;
+                padding: 10px;
+            }
+            h1{
+                font-size: 24px;
+                margin: 0; 
+            }
+            img {
+                display: block;
+                margin: 0 auto;
+            }
+            .blank { grid-area: blank; visibility: hidden;}
+            #upButton { grid-area: up; }
+            #downButton { grid-area: down; }
+            #rightButton { grid-area: right; }
+            #leftButton { grid-area: left; }
+            .controls {
+                display: flex;
+                justify-content: center;
+            }
+            button {
+                font-size: 16px;
+                padding: 32px;
+                margin: 5px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .icon {
+                width: 24px;
+                height: 24px;
+                pointer-events: none;
+            }
+        </style>
+        <!-- Load the Google icons library -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    </head>
+    <body>
+        <div id="wrapper">
+            <header>
+                <h1><strong>SmartHome Security</strong></h1>
+                <h2>A Smart and Flexible Cloud-Based Home Security Solution</h2>
+            </header>
+            <img src="your-image-url.jpg" alt="SmartHome Security Image">
+            <div class="controls">
+                <button class="blank"><i class="material-icons icon">keyboard_arrow_up</i></button>
+                <button id="upButton" onmousedown="handlePress(event)" onmouseup="handleRelease()"><i class="material-icons icon">keyboard_arrow_up</i></button>
+                <button class="blank"><i class="material-icons icon">keyboard_arrow_up</i></button>
+            </div>
+            <div class="controls">
+                <button id="leftButton" onmousedown="handlePress(event)" onmouseup="handleRelease()"><i class="material-icons icon">keyboard_arrow_left</i></button>
+                <button class="blank"><i class="material-icons icon">keyboard_arrow_up</i></button>
+                <button id="rightButton" onmousedown="handlePress(event)" onmouseup="handleRelease()"><i class="material-icons icon">keyboard_arrow_right</i></button>
+            </div>
+            <div class="controls">
+                <button class="blank"><i class="material-icons icon">keyboard_arrow_up</i></button>
+                <button id="downButton" onmousedown="handlePress(event)" onmouseup="handleRelease()"><i class="material-icons icon">keyboard_arrow_down</i></button>
+                <button class="blank"><i class="material-icons icon">keyboard_arrow_up</i></button>
+            </div>
+        </div>
+        <script>
+            let panValue = 0;
+            let tiltValue = 0;
+            // Define a variable to store the interval ID
+            let interval;
+
+            const img = document.querySelector('img');
+        function createWebSocket(serverName){
+            const externalIP = '35.185.186.229';
+            const WS_Port = 65080;
+            const WS_URL = `ws://${externalIP}:${WS_Port}/${serverName}`;
+            const ws = new WebSocket(WS_URL);
+
+            let urlObject;
+            return ws;
+        }
+        const cameraWebSocket = createWebSocket('camera');
+            cameraWebSocket.onmessage = (event) => {
+            let urlObject;
+            // Handle Blob data from the camera
+            const arrayBuffer = event.data;
+            if(urlObject){
+                                console.log("Blob data is received");
+                                URL.revokeObjectURL(urlObject);
+                        }
+                        urlObject = URL.createObjectURL(new Blob([arrayBuffer]));
+                        img.src = urlObject;
+            // const blob = event.data;
+            // const objectURL = URL.createObjectURL(blob);
+            // cameraImage.src = objectURL;
+        };
+        const controlWebSocket = createWebSocket('control');
+        controlWebSocket.onmessage = (event) => {
+            // Handle JSON data from the server (broadcasted to all clients)
+            const jsonData = JSON.parse(event.data);
+            console.log('Received JSON data from server:', jsonData);
+            panValue = jsonData.PAN;
+            tiltValue = jsonData.TILT;
+            // Your logic to handle control data here
+        };
+
+            function move(){
+                var full_data = `{"PAN": ${panValue}, "TILT": ${tiltValue}}`;
+                console.log("Sent data: " + full_data);
+                controlWebSocket.send(full_data);
+            }
+            function updatePanValue(pan) {
+                panValue = pan;
+                console.log("Pan Value: " + panValue);
+                move();
+            }
+            function updateTiltValue(tilt) {
+                tiltValue = tilt;
+                console.log("Tilt Value: " + tiltValue);
+                move();
+            }
+            // Define a function to handle the button press
+            function handlePress(button) {
+                // Clear any existing interval
+                clearInterval(interval);
+                // Check which button is pressed and update the value accordingly
+                if (button.id === "upButton") {
+                    updateTiltValue(Math.min(tiltValue + 1, 90));
+                    // Set an interval to increment the value every 100 milliseconds
+                    interval = setInterval(() => {
+                        updateTiltValue(Math.min(tiltValue + 1, 90));
+                    }, 100);
+                } else if (button.id === "downButton") {
+                    updateTiltValue(Math.max(tiltValue - 1, -90));
+                    // Set an interval to decrement the value every 100 milliseconds
+                    interval = setInterval(() => {
+                        updateTiltValue(Math.max(tiltValue - 1, -90));
+                    }, 100);
+                } else if (button.id === "leftButton") {
+                    updatePanValue(Math.max(panValue - 1, 0));
+                    // Set an interval to decrement the value every 100 milliseconds
+                    interval = setInterval(() => {
+                        updatePanValue(Math.max(panValue - 1, 0));
+                    }, 100);
+                } else if (button.id === "rightButton") {
+                    updatePanValue(Math.min(panValue + 1, 180));
+                    // Set an interval to increment the value every 100 milliseconds
+                    interval = setInterval(() => {
+                        updatePanValue(Math.min(panValue + 1, 180));
+                    }, 100);
+                }
+            }
+
+            // Define a function to handle the button release
+            function handleRelease() {
+                // Clear the interval
+                clearInterval(interval);
+            }
+            // Add the mousedown and mouseup event listeners to the buttons
+            document.getElementById('upButton').addEventListener('mousedown', (event) => {
+                handlePress(event.target);
+            });
+            document.getElementById('upButton').addEventListener('mouseup', handleRelease);
+
+            document.getElementById('downButton').addEventListener('mousedown', (event) => {
+                handlePress(event.target);
+            });
+            document.getElementById('downButton').addEventListener('mouseup', handleRelease);
+
+            document.getElementById('leftButton').addEventListener('mousedown', (event) => {
+                handlePress(event.target);
+            });
+            document.getElementById('leftButton').addEventListener('mouseup', handleRelease);
+
+            document.getElementById('rightButton').addEventListener('mousedown', (event) => {
+                handlePress(event.target);
+            });
+            document.getElementById('rightButton').addEventListener('mouseup', handleRelease);
+        </script>
+    </body>
+</html>
