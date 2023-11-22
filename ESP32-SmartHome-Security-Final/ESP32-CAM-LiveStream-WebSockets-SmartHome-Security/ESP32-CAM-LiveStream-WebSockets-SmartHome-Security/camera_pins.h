@@ -17,4 +17,4 @@
 #define PCLK_GPIO_NUM     22
 
 // 4 for flash led or 33 for normal led
-#define LED_GPIO_NUM       4
+#define LED_GPIO_NUM       33
