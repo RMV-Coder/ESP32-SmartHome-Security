@@ -7,8 +7,8 @@
 #define servoTiltPin 14 //change accordingly
 #define servoPanPin 13 //change accordingly
 
-int panValue = 0;
-int tiltValue = 0;
+int panValue = 0, tiltValue = 0;
+int actualPan, actualTilt;
 int wifi_timeout = 120; //120 seconds timeout
 int wifi_connection_attempts = 0;
 
@@ -84,8 +84,6 @@ wm.setConfigPortalTimeout(wifi_timeout);
       
       Serial.print(", TILT: ");
       Serial.println(tiltValue);
-
-      moveServo(panValue, tiltValue);
     }
   });
 }
@@ -95,12 +93,13 @@ void loop() {
   if(controlClient.available()){
     controlClient.poll();
   }
-  delay(20);
+  moveServo(panValue, tiltValue);
+  delay(15);
 }
 
 void moveServo(int pan, int tilt){
-  int actualPan = 180 - pan;
+  actualPan = 180 - pan;
+  actualTilt = 180 - tilt;
   servoPan.write(actualPan);
   servoTilt.write(tilt);
-  delay(50);
 }
