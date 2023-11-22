@@ -4,7 +4,7 @@
 #include <ArduinoJson.h>
 #include <ESP32Servo.h>
 
-#define servoTiltPin 4 //change accordingly
+#define servoTiltPin 14 //change accordingly
 #define servoPanPin 13 //change accordingly
 
 int panValue = 0;
@@ -78,10 +78,11 @@ wm.setConfigPortalTimeout(wifi_timeout);
       // Access JSON data
       panValue = doc["PAN"];
       tiltValue = doc["TILT"];
-      Serial.print("PAN: ");
-      Serial.println(panValue);
       
-      Serial.print("TILT: ");
+      Serial.print("PAN: ");
+      Serial.print(panValue);
+      
+      Serial.print(", TILT: ");
       Serial.println(tiltValue);
 
       moveServo(panValue, tiltValue);
@@ -98,7 +99,8 @@ void loop() {
 }
 
 void moveServo(int pan, int tilt){
-  servoPan.write(pan);
+  int actualPan = 180 - pan;
+  servoPan.write(actualPan);
   servoTilt.write(tilt);
   delay(50);
 }
