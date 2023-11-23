@@ -41,7 +41,7 @@ void setup() {
 
 wm.setConfigPortalTimeout(wifi_timeout);
   //wm.resetSettings();
-  wm.preloadWiFi("Walay Tulog","prinniegwapo");
+  //wm.preloadWiFi("Walay Tulog","prinniegwapo");
   result = wm.autoConnect("ESP32CAM","12345678"); // password protected ap
 
   if(!result) {
