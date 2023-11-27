@@ -35,11 +35,11 @@ void setup() {
 
   servoPan.attach(servoPanPin, 500, 2400);
   servoTilt.attach(servoTiltPin, 500, 2400);
-  servoPan.write(panValue);
-  servoTilt.write(tiltValue);
+  servoPan.write(90);
+  servoTilt.write(0);
   Serial.begin(115200);
 
-wm.setConfigPortalTimeout(wifi_timeout);
+  wm.setConfigPortalTimeout(wifi_timeout);
   //wm.resetSettings();
   //wm.preloadWiFi("Walay Tulog","prinniegwapo");
   result = wm.autoConnect("ESP32CAM","12345678"); // password protected ap
@@ -99,7 +99,15 @@ void loop() {
 
 void moveServo(int pan, int tilt){
   actualPan = 180 - pan;
-  actualTilt = 180 - tilt;
+  actualTilt = 75 - tilt;
+  Serial.print("Actual Pan: ");
+  Serial.print(actualPan);
+  Serial.print(", Pan Received: ");
+  Serial.println(pan);
+  Serial.print("Actual Tilt: ");
+  Serial.print(actualTilt);
+  Serial.print(", Tilt Received: ");
+  Serial.println(tilt);
   servoPan.write(actualPan);
-  servoTilt.write(tilt);
+  servoTilt.write(actualTilt);
 }
