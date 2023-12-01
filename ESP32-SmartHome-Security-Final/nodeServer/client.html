@@ -1,79 +1,81 @@
-<html lang="en">   
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartHome Security</title>
-    <link rel="stylesheet" href="style.css">
-    <link href='https://fonts.googleapis.com/css?family=K2D' rel='stylesheet'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet'>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-</head>
-<body data-new-gr-c-s-check-loaded="14.1138.0" data-gr-ext-installed="">
-    <div id="wrapper">
-        <ul>
-            <li style="float: left;"><a id="linkTitle" href="/client.html">SmartHome Security</a></li>
-            <li><a class = "navigationLink" href="#githublink">Project Files</a></li>
-            <li><a class = "navigationLink" href="/about.html">About</a></li>
-        </ul>
-        <div id="divider">
-            <div id="myStream">
-                <div id="card">
-                    <div class="card__skeleton card__description"></div>
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>SmartHome Security</title>
+                <link rel="stylesheet" href="style.css">
+                <link href='https://fonts.googleapis.com/css?family=K2D' rel='stylesheet'>
+                <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+                <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet'>
+                <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        </head>
+        <body>
+            <div id="wrapper">
+                    <ul>
+                            <li style="float: left;"><a id="linkTitle" href="/client.html">SmartHome Security</a></li>
+                            <li><a class = "navigationLink" href="https://github.com/RMV-Coder/ESP32-SmartHome-Security" target="_blank">Project Files</a></li>
+                            <li><a class = "navigationLink" href="/about.html">About</a></li>
+                    </ul>
+                    <div id="divider">
+                            <div id="myStream">
+                                    <div id="card" style="display:block">
+                                            <div class="card__skeleton card__description"></div>
+                                    </div>
+                                    <img src="" id="stream">
+                                    <!-- Rectangular Switch -->
+                                    <div style="width:400px; margin:0 auto; text-align: left">
+                                            <label class="switch">
+                                                    <input type="checkbox" id="switchControls" style="float:left">
+                                                    <span class="slider"></span>
+                                            </label>
+                                            <p id="current-control" style="width:324px; height:18px; margin:8px; font-size:14px; float: right">Buttons</p>
+                                    </div>
+                            </div>
+                            <div id="myControls">
+                                <div id="slide-control" style="display:none">
+                                        <p> Pan Value: <span id="currentPan">0</span></p>
+                                        <input type="range" min="0" max="180" value="0" step="1" class="rangeSlider" id="camPan">
+                                        <p> Tilt Value: <span id="currentTilt">0</span></p>
+                                        <input type="range" min="0" max="75" value="0" step="1" class="rangeSlider" id="camTilt">
+                                <!--<p> Flash Value: <span id="currentFlash">0</span></p>
+                                <input type="range" min="0" max="10" value="0" step="1" class="rangeSlider" id="camFlash">-->
+                                </div>
+                                <div id="button-control" style="display: block;">
+                                        <div class="controls">
+                                                <button id="captureButton" onclick="captureImage()" style="background-color: grey;"><i class="material-icons icon">photo_camera</i></button>
+                                                <button id="upButton" onmousedown="handlePress(event)" onmouseup="handleRelease()" style="background-color: grey;"><i class="material-icons icon">keyboard_arrow_up</i></button>
+                                                <button id="espButton" onclick="espRestart();" style="background-color: grey;"><i class="material-icons icon" id="espIcon">power_settings_new</i></button>
+                                        </div>
+                                        <div class="controls">
+                                                <button id="leftButton" onmousedown="handlePress(event)" onmouseup="handleRelease()" style="background-color: grey;"><i class="material-icons icon">keyboard_arrow_left</i></button>
+                                                <button id="resetButton" onclick="resetCam()" style="background-color: grey;"><i class="material-icons icon">restart_alt</i></button>
+                                                <button id="rightButton" onmousedown="handlePress(event)" onmouseup="handleRelease()" style="background-color: grey;"><i class="material-icons icon">keyboard_arrow_right</i></button>
+                                        </div>
+                                        <div class="controls">
+                                                <button id="startStreamButton" onclick="startStreaming()" style="background-color: grey;"><i class="material-icons icon">play_circle</i></button>
+                                                <button id="downButton" onmousedown="handlePress(event)" onmouseup="handleRelease()" style="background-color: grey;"><i class="material-icons icon">keyboard_arrow_down</i></button>
+                                                <button id="stopStreamButton" onclick="stopStreaming()" style="background-color: grey;"><i class="material-icons icon">stop_circle</i></button>
+                                        </div>
+                                </div>
+                        </div>
                 </div>
-                <img src="" alt="" id="stream">
-                <!-- Rectangular switch -->
-                <div style="width:400px; margin:0 auto; text-align: left">
-                    <label class="switch">
-                        <input type="checkbox" id="switchControls" style="float:left">
-                        <span class="slider"></span>
-                    </label>
-                    <p id="current-control" style="width:324px; height:18px; margin:8px; font-size:14px; float: right">Buttons</p>
-                </div>
-            </div>
-            <div id="myControls">
-                <div id="slide-control" style="display:none">
-                    <p> Pan Value: <span id="currentPan">0</span></p>
-                    <input type="range" min="0" max="180" value="0" step="1" class="rangeSlider" id="camPan">
-                    <p> Tilt Value: <span id="currentTilt">0</span></p>
-                    <input type="range" min="0" max="180" value="0" step="1" class="rangeSlider" id="camTilt">
-                    <p> Flash Value: <span id="currentFlash">0</span></p>
-                    <input type="range" min="0" max="10" value="0" step="1" class="rangeSlider" id="camFlash">
-                </div>
-                <div id="button-control" style="display: block;">
-                    <div class="controls">
-                        <button id="captureButton" onclick="captureImage()" style="background-color: grey;"><i class="material-icons icon">photo_camera</i></button>
-                        <button id="upButton" onmousedown="handlePress(event)" onmouseup="handleRelease()" style="background-color: grey;"><i class="material-icons icon">keyboard_arrow_up</i></button>
-                        <button id="flashButton" onclick="flashOn();" style="background-color: grey;"><i class="material-icons icon" id="flashIcon">flash_off</i></button>
-                    </div>
-                    <div class="controls">
-                        <button id="leftButton" onmousedown="handlePress(event)" onmouseup="handleRelease()" style="background-color: grey;"><i class="material-icons icon">keyboard_arrow_left</i></button>
-                        <button id="resetButton" onclick="resetCam()" style="background-color: grey;"><i class="material-icons icon">restart_alt</i></button>
-                        <button id="rightButton" onmousedown="handlePress(event)" onmouseup="handleRelease()" style="background-color: grey;"><i class="material-icons icon">keyboard_arrow_right</i></button>
-                    </div>
-                    <div class="controls">
-                        <button id="startRecordButton" onclick="startRecording()" style="background-color: grey;"><i class="material-icons icon">fiber_manual_record</i></button>
-                        <button id="downButton" onmousedown="handlePress(event)" onmouseup="handleRelease()" style="background-color: grey;"><i class="material-icons icon">keyboard_arrow_down</i></button>
-                        <button id="stopRecordButton" onclick="stopRecording()" style="background-color: grey;"><i class="material-icons icon">stop</i></button>
-                    </div>
-                </div>
-            </div>
         </div>
-    </div>
-    <div id="myTerminal">
-        <div id="icon">
-            <p>>_</p>
+        <div id="myTerminal">
+                <div id="icon">
+                        <p>>_</p>
+                </div>
+                <div id="terminalMessages">
+
+                </div>
         </div>
-        <div id="terminalMessages">
-        
-        </div>
-    </div>
-    <script>
-        let panValue = 0;
+<script>
+    let panValue = 0;
         let tiltValue = 0;
-        let flashValue = 0;
+        let powerValue = 1;
         let captureValue = 0;
-        let recordStatus = 0;
+        let isStreaming = true;
+        let streamValue = 0;
         let messageCounter = 0;
         // Define a variable to store the interval ID
         let interval;
@@ -85,29 +87,27 @@
         const slideControls = document.getElementById("slide-control");
         const terminal = document.getElementById("terminalMessages");
         const loader = document.getElementById("card");
-        const myFlashButton = document.getElementById("flashButton");
-        const myFlashIcon = document.getElementById("flashIcon");
-        const myStartRecordButton = document.getElementById("startRecordButton");
-        const myStopRecordButton = document.getElementById("stopRecordButton");
-        myStopRecordButton.disabled=true;
-        myStopRecordButton.style.backgroundColor="grey";
-        myStartRecordButton.style.backgroundColor="#007bff";
+        const restartButton = document.getElementById("espButton");
+        const myEspIcon = document.getElementById("espIcon");
+        const myStartStreamButton = document.getElementById("startStreamButton");
+        const myStopStreamButton = document.getElementById("stopStreamButton");
         const img = document.querySelector('img');
         const externalIP = '35.185.186.229';
         const WS_Port = 65080;
-        
+
         const cameraWebSocket = new WebSocket(`ws://${externalIP}:${WS_Port}/camera`);
         if(!isCameraFrameReceived){
             if(loader.style.display === "none"){
                 loader.style.display="block";
             }
         }
+
         //Camera WebSocket:
         cameraWebSocket.onopen = () => {
             console.log('Connection to the SmartHome Security Camera WebSocket Server opened');
             messageCounter++;
             let message = document.createElement("p");
-            message.className= "reload-message";
+            message.className = "reload-message";
             message.id=`message${messageCounter}`;
             message.style.color="whitesmoke";
             message.textContent="Connection to the SmartHome Security Camera WebSocket Server opened";
@@ -116,9 +116,18 @@
             if(buttonControls.style.display === "none"){
                 buttonControls.style.display = "block";
             }
+            const buttons = document.querySelectorAll('.controls button');
+            buttons.forEach(button => {
+                    if(button.id!=='startStreamButton'){
+                        button.style.backgroundColor= '#007bff';
+                        button.disabled = false;
+                    } else {
+                        button.disabled = true;
+                    }
+            });  
         };
         cameraWebSocket.onmessage = (event) => {
-            if(!isCameraFrameReceived){
+            if(!isCameraFrameReceived && isStreaming){
                 isCameraFrameReceived = true;
                 if(loader.style.display === "block"){
                     loader.style.display="none";
@@ -129,6 +138,21 @@
                 }
                 urlObject = URL.createObjectURL(new Blob([arrayBuffer]));
                 img.src = urlObject;
+            }else if (isStreaming && isCameraFrameReceived){
+                if(loader.style.display === "block"){
+                    loader.style.display="none";
+                }
+                const arrayBuffer = event.data;
+                if(urlObject){
+                    URL.revokeObjectURL(urlObject);
+                }
+                urlObject = URL.createObjectURL(new Blob([arrayBuffer]));
+                img.src = urlObject;
+            }else if (!isStreaming){
+                img.src="";
+                if(loader.style.display === "none"){
+                    loader.style.display="block";
+                }
             }
         };
         cameraWebSocket.onclose = (event) => {
@@ -144,6 +168,7 @@
             if(loader.style.display === "none"){
                 loader.style.display="block";
             }
+            location.reload();
         };
 
         //Control WebSocket:
@@ -182,43 +207,41 @@
             reloadMessage.textContent="Connection to the SmartHome Security Control WebSocket Server has been closed. Please refresh the page to reconnect.";
             terminal.appendChild(reloadMessage);
             reloadMessage.scrollIntoView({behavior:"auto"});
+            location.reload();
         };
-
         function move(){
             var jsonData = {
                 PAN: panValue, 
                 TILT: tiltValue,
-                FLASH: flashValue,
+                POWER: powerValue,
+                CAPTURE: captureValue,
+                STREAM: streamValue
+
             };
             var full_data = JSON.stringify(jsonData);
             console.log('Sent data:', full_data);
             controlWebSocket.send(full_data);
         }
+
         let panSlider = document.getElementById("camPan");
         let tiltSlider= document.getElementById("camTilt");
-        let flashSlider = document.getElementById("camFlash");
+        //let flashSlider = document.getElementById("camFlash");
         let panOutput = document.getElementById("currentPan");
         let tiltOutput= document.getElementById("currentTilt");
-        let flashOutput= document.getElementById("currentFlash");
+        //let flashOutput= document.getElementById("currentFlash");
         panOutput.innerHTML = panSlider.value;
         tiltOutput.innerHTML = tiltSlider.value;
-        flashOutput.innerHTML = flashSlider.value;
-        panSlider.oninput = function() {
+        //flashOutput.innerHTML = flashSlider.value;
+        panSlider.onchange = function() {
             panOutput.textContent = this.value;
             panValue = this.value;
             updatePanValue(panValue);
             move();
         }
-        tiltSlider.oninput = function() {
+        tiltSlider.onchange = function() {
             tiltOutput.textContent = this.value;
             tiltValue = this.value;
             updateTiltValue(tiltValue);
-            move();
-        }
-        flashSlider.oninput = function() {
-            flashOutput.textContent = this.value;
-            flashValue = this.value;
-            updateFlashValue(flashValue);
             move();
         }
         function resetCam(){
@@ -237,7 +260,7 @@
 
             // Set background color to blue for each button
             buttons.forEach(button => {
-                if(button.id !=='resetButton' && button.id !=='captureButton' && button.id !=='flashButton' && button.id !=='startRecordButton' && button.id !=='stopRecordButton'){
+                if(button.id !=='resetButton' && button.id !=='captureButton' && button.id !=='espButton' && button.id !=='startStreamButton' && button.id !=='stopStreamButton' && button.id !== 'espButton'){
                     button.style.backgroundColor = '#007bff';
                     button.disabled = false;
                 }
@@ -278,7 +301,7 @@
 
                     // Set background color to grey for each button
                     buttons.forEach(button => {
-                        if(button.id !=='resetButton'){
+                        if(button.id !=='resetButton' && button.id !=='captureButton' && button.id !=='startStreamButton' && button.id !=='stopStreamButton' && button.id !== 'espButton'){
                             button.style.backgroundColor = 'grey';
                             button.disabled = true;
                         }
@@ -299,7 +322,6 @@
                 message.scrollIntoView({behavior:"auto"});
             }
         });
-    
         function updatePanValue(pan) {
             panValue = pan;
             console.log("Pan Value: " + panValue);
@@ -310,11 +332,7 @@
             console.log("Tilt Value: " + tiltValue);
             move();
         }
-        function updateFlashValue(flash) {
-            flashValue = flash;
-            console.log("Flash Value: " + flashValue);
-            move();
-        }
+
         //Function to handle the control button press
         function handlePress(button) {
             // Clear any existing interval
@@ -344,12 +362,7 @@
         }
         function captureImage(){
             captureValue = 1;
-            var data = {
-                CAPTURE: captureValue
-            };
-            var capture_data = JSON.stringify(data);
-            console.log('Sent data:', capture_data);
-            controlWebSocket.send(capture_data);
+            move();
             messageCounter++;
             let message = document.createElement("p");
             message.className = "reload-message";
@@ -360,85 +373,61 @@
             message.scrollIntoView({behavior:"auto"});
             captureValue = 0;
         }
-        function flashOn(){
-            flashValue = 8;
-            var flash = {
-                FLASH: flashValue
-            };
-            var flash_data = JSON.stringify(flash);
-            console.log('Sent data:', flash_data);
-            controlWebSocket.send(flash_data);
-            messageCounter++;
-            let message = document.createElement("p");
-            message.className = "reload-message";
-            message.id=`message${messageCounter}`;
-            message.style.color="whitesmoke";
-            message.textContent="Flash is turned ON.";
-            terminal.appendChild(message);
-            message.scrollIntoView({behavior:"auto"});
-            myFlashButton.setAttribute("onclick", "flashOff()");
-            myFlashButton.style.backgroundColor = "#007bff";
-            myFlashIcon.textContent="flash_on";
-        }
-        function flashOff(){
-            flashValue = 0;
+        function espRestart(){
+            powerValue = 0;
             move();
-            var flash = {
-                FLASH: flashValue
-            };
-            var flash_data = JSON.stringify(flash);
-            console.log('Sent data:', flash_data);
-            controlWebSocket.send(flash_data);
+            powerValue = 1;
             messageCounter++;
             let message = document.createElement("p");
             message.className = "reload-message";
             message.id=`message${messageCounter}`;
             message.style.color="whitesmoke";
-            message.textContent="Flash is turned OFF.";
+            message.textContent="ESP Restart.";
             terminal.appendChild(message);
             message.scrollIntoView({behavior:"auto"});
-            myFlashButton.setAttribute("onclick", "flashOn()");
-            myFlashButton.style.backgroundColor = "grey";
-            myFlashIcon.textContent="flash_off";
+            restartButton.style.backgroundColor = "#007bff";
+            //myEspIcon.textContent="power_off";
         }
-        function startRecording(){
-            recordStatus = 1;
-            var record = { RECORD: recordStatus};
-            var record_data = JSON.stringify(record);
-            controlWebSocket.send(record_data);
+        function startStreaming(){
+            isStreaming = true;
+            streamValue = 1;
+            move();
             messageCounter++;
             let message = document.createElement("p");
             message.className = "reload-message";
             message.id=`message${messageCounter}`;
             message.style.color="whitesmoke";
-            message.textContent="Recording Started.";
+            message.textContent="Video Streaming Started.";
             terminal.appendChild(message);
             message.scrollIntoView({behavior:"auto"});
-            if(recordStatus == 1){
-                myStartRecordButton.disabled=true;
-                myStartRecordButton.style.backgroundColor="grey";
-                myStopRecordButton.disabled=false;
-                myStopRecordButton.style.backgroundColor="#007bff";
+            if(isStreaming){
+                myStartStreamButton.disabled=true;
+                myStartStreamButton.style.backgroundColor="grey";
+                myStopStreamButton.disabled=false;
+                myStopStreamButton.style.backgroundColor="#007bff";
             }
         }
-        function stopRecording(){
-            recordStatus = 0;
-            var record = { RECORD: recordStatus};
-            var record_data = JSON.stringify(record);
-            controlWebSocket.send(record_data);
+        function stopStreaming(){
+            isStreaming = false;
+            streamValue = 0;
+            move();
             messageCounter++;
             let message = document.createElement("p");
             message.className = "reload-message";
             message.id=`message${messageCounter}`;
             message.style.color="whitesmoke";
-            message.textContent="Recording Stopped.";
+            message.textContent="Video Streaming Stopped.";
             terminal.appendChild(message);
             message.scrollIntoView({behavior:"auto"});
-            if(recordStatus == 0){
-                myStartRecordButton.disabled=false;
-                myStartRecordButton.style.backgroundColor="#007bff";
-                myStopRecordButton.disabled=true;
-                myStopRecordButton.style.backgroundColor="grey";
+            if(!isStreaming){
+                myStartStreamButton.disabled=false;
+                myStartStreamButton.style.backgroundColor="#007bff";
+                myStopStreamButton.disabled=true;
+                myStopStreamButton.style.backgroundColor="grey";
+                img.src = "";
+                if(loader.style.display === "none"){
+                    loader.style.display="block";
+                }
             }
         }
         // Function to handle the control button release
@@ -446,7 +435,6 @@
             // Clear the interval
             clearInterval(interval);
         }
-
         // Add the mousedown and mouseup event listeners to the buttons
         document.getElementById('upButton').addEventListener('mousedown', (event) => {
             handlePress(event.target);
@@ -467,6 +455,8 @@
             handlePress(event.target);
         });
         document.getElementById('rightButton').addEventListener('mouseup', handleRelease);
-    </script>
-</body>
+        </script>
+        </body>
 </html>
+
+
