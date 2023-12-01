@@ -21,6 +21,18 @@ WebsocketsClient controlClient;  //Websocket connection to /control path
 
 Servo servoPan; //horizontal control
 Servo servoTilt;//vertical control
+void connectToServer(){
+  while(!controlClient.connect(websocket_server_host, websocket_server_port, "/control")){
+    delay(500);
+    Serial.print(".");
+    wifi_connection_attempts++;
+    if(wifi_connection_attempts == 4){
+      Serial.print("initiating ESP restart to refresh...");
+      ESP.restart();
+    }
+  }
+  Serial.println("Connected to control websocket server!");
+}
 void setup() {
   //WiFi.mode(WIFI_STA);
   WiFiManager wm;
@@ -52,16 +64,7 @@ void setup() {
     Serial.println("Connected to WiFi Successfully!");
   }
 
-  while(!controlClient.connect(websocket_server_host, websocket_server_port, "/control")){
-    delay(500);
-    Serial.print(".");
-    wifi_connection_attempts++;
-    if(wifi_connection_attempts == 4){
-      Serial.print("initiating ESP restart to refresh...");
-      ESP.restart();
-    }
-  }
-  Serial.println("Connected to control websocket server!");
+  connectToServer();
   controlClient.onMessage([&](WebsocketsMessage message){
     if (message.isText()) {
       Serial.print("Received JSON Message: ");
@@ -92,6 +95,10 @@ void loop() {
   // put your main code here, to run repeatedly:
   if(controlClient.available()){
     controlClient.poll();
+  } else {
+    //Initiate ESP Restart to reconnect to server.
+    Serial.println("Got disconnected from Control WebSocket Server, will try to reconnect...");
+    connectToServer();
   }
   moveServo(panValue, tiltValue);
   delay(15);
