@@ -42,6 +42,8 @@ int isRecording = 0;
 int isNowStreaming = 0;
 int wifi_timeout = 120; //120 seconds timeout
 int wifi_connection_attempts = 0;
+int saturation=1, contrast=2, brightness=2, awb=1, awb_gain=1,wb_mode=0, aec=1, aec2=1, ae_level=0, agc=1, gainceiling=1, bpc=1, wpc=1, raw_gma=1, lenc=1, dcw=1, special_effect=0;
+int quality = 15;//10-20
 const char* websocket_server_host = "35.185.186.229";
 const uint16_t websocket_server_port = 65080;
 const size_t jsonBufferSize = 1024;
@@ -51,7 +53,27 @@ WebsocketsClient cameraClient;  //Websocket connection to /camera path
 WebsocketsClient controlClient; //Websocket connection to /control path
 Servo servoPan; //horizontal servo control
 Servo servoTilt;//vertical servo control
-
+void setSensor(){
+  sensor_t *s = esp_camera_sensor_get();
+  s->set_quality(s, quality);
+  s->set_contrast(s, contrast);
+  s->set_brightness(s, brightness);
+  s->set_saturation(s, saturation);
+  s->set_gainceiling(s, (gainceiling_t)gainceiling);
+  s->set_whitebal(s, awb);
+  s->set_gain_ctrl(s, agc);
+  s->set_exposure_ctrl(s, aec);
+  s->set_awb_gain(s, awb_gain);
+  s->set_aec2(s, aec2);
+  s->set_dcw(s, dcw);
+  s->set_bpc(s, bpc);
+  s->set_wpc(s, wpc);
+  s->set_raw_gma(s, raw_gma);
+  s->set_lenc(s, lenc);
+  s->set_special_effect(s, special_effect);
+  s->set_wb_mode(s, wb_mode);
+  s->set_ae_level(s, ae_level);
+}
 void initialCameraConfig(){
   initConfig.ledc_channel = LEDC_CHANNEL_0;
   initConfig.ledc_timer = LEDC_TIMER_0;
@@ -71,7 +93,7 @@ void initialCameraConfig(){
   initConfig.pin_sscb_scl = SIOC_GPIO_NUM;
   initConfig.pin_pwdn = PWDN_GPIO_NUM;
   initConfig.pin_reset = RESET_GPIO_NUM;
-  initConfig.xclk_freq_hz = 20000000;
+  initConfig.xclk_freq_hz = 10000000;
   initConfig.pixel_format = PIXFORMAT_JPEG;
 }
 void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
@@ -154,25 +176,25 @@ void setup() {
   if(psramFound()){
     if(WiFi.RSSI() < -65){//Weak WiFi
       initConfig.frame_size = FRAMESIZE_CIF;//CIF,VGA,SVGA
-      initConfig.jpeg_quality = 20;//0-63, 0 highest - 63 lowest
+      initConfig.jpeg_quality = 18;//0-63, 0 highest - 63 lowest
       initConfig.fb_count = 1;
       Serial.print("RSSI: ");
       Serial.print(WiFi.RSSI());
       Serial.println(", Frame Size: CIF, Quality: 18, FB Count: 1");
     } else if(WiFi.RSSI() >= -65 && WiFi.RSSI() <= -48){//Good WiFi
-      initConfig.frame_size = FRAMESIZE_CIF;//CIF,VGA,SVGA
+      initConfig.frame_size = FRAMESIZE_VGA;//CIF,VGA,SVGA
       initConfig.jpeg_quality = 15;//0-63, 0 highest - 63 lowest
       initConfig.fb_count = 2;
       Serial.print("RSSI: ");
       Serial.print(WiFi.RSSI());
-      Serial.println(", Frame Size: CIF, Quality: 14, FB Count: 2");
+      Serial.println(", Frame Size: VGA, Quality: 15, FB Count: 2");
     } else if(WiFi.RSSI() > -47){//Very Strong WiFi
-      initConfig.frame_size = FRAMESIZE_CIF;//CIF,VGA,SVGA
+      initConfig.frame_size = FRAMESIZE_SVGA;//CIF,VGA,SVGA
       initConfig.jpeg_quality = 10;//0-63, 0 highest - 63 lowest
       initConfig.fb_count = 2;
       Serial.print("RSSI: ");
       Serial.print(WiFi.RSSI());
-      Serial.println(", Frame Size: CIF, Quality: 10, FB Count: 2");
+      Serial.println(", Frame Size: SVGA, Quality: 10, FB Count: 2");
     }
   } else {
     if(WiFi.RSSI() < -65){//Weak WiFi
@@ -204,13 +226,13 @@ void setup() {
     Serial.printf("Camera init failed with error 0x%x", err);
     ESP.restart();
   }
+  setSensor();
   //Serial.println("Starting SD Card");
   if(!SD_MMC.begin()){ 
     Serial.println("SD Card Mount Failed");
     return;
   }
 
-  
   uint8_t cardType = SD_MMC.cardType();
   if(cardType == CARD_NONE){
     Serial.println("No SD Card attached");
