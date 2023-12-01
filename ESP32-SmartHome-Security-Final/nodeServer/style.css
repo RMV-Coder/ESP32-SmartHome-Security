@@ -1,7 +1,15 @@
+html{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Source Code Pro;
+}
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    margin-top:0;
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 #wrapper {
     max-width: 100%;
@@ -36,10 +44,11 @@ div#icon>p{
     height:10%;
     font-family: Source Code Pro;
     color: whitesmoke;
+    pointer-events:none;
 }
 #terminalMessages{
     overflow-y: auto;
-    height: 90%;
+    max-height: 90%;
     padding: 0 8px;
 }
 #terminalMessages>p{
@@ -49,20 +58,20 @@ div#icon>p{
 ::-webkit-scrollbar {
     width: 10px;
   }
-  
+
   /* Track */
   ::-webkit-scrollbar-track {
-    background: #f1f1f1; 
+    background: #f1f1f1;
   }
-   
+
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #888; 
+    background: #888;
   }
-  
+
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #555; 
+    background: #555;
   }
 header {
     background-color: #505050;
@@ -72,7 +81,7 @@ header {
 }
 h1{
     font-size: 32px;
-    margin: 0; 
+    margin: 0;
 }
 img {
     display: block;
@@ -108,7 +117,7 @@ div.controls>button {
     pointer-events: none;
 }
 #stream {
-    max-width: 100%;
+    max-width: 400px;
     object-fit:contain;
 }
 /* The switch - the box around the slider */
@@ -221,16 +230,16 @@ input:checked + .slider:before {
     border-radius: inherit;
     animation: shimmer 1.5s infinite;
 }
-  
+
 .card__title {
     height: 15px;
     margin-bottom: 15px;
 }
-  
+
 .card__description {
     height: 290px;
 }
-  
+
 @keyframes shimmer {
     to {
         background-position: -100% 0;
@@ -264,4 +273,47 @@ li a.navigationLink:hover:not(.active){
 }
 .active{
     background-color: #04AA6D;
+}
+/* Media query for mobile phones */
+@media screen and (max-width: 960px) {
+    div>#divider {
+        flex-direction: column;
+        justify-content: center;
+      }
+    div#divider>#myControls{
+        margin:auto;
+        width:100%;
+    }
+    li a.navigationLink{
+        display: block;
+        color: white;
+        font-family: K2D;
+        text-align: center;
+        padding: 14px 14px;
+        text-decoration: none;
+        font-size: 12px;
+    }
+    li a#linkTitle{
+        text-decoration: none; font-family: K2D; font-size: 20px; display: block; color: white; text-align: center; padding: 6px 14px;
+    }
+    #card {
+        width: 100%;
+    }
+    #stream{
+        max-width: 100%;
+    }
+    div#myTerminal{
+        background-color: #111;
+        height: 14.7%;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+    }
+    div#myTerminal>div#icon{
+        height: 17.5%;
+    }
+    div#terminalMessages>p{
+        padding-left: 16px;
+    }
 }
