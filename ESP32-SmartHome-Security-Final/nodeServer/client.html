@@ -29,7 +29,8 @@
                                                     <input type="checkbox" id="switchControls" style="float:left">
                                                     <span class="slider"></span>
                                             </label>
-                                            <p id="current-control" style="width:324px; height:18px; margin:8px; font-size:14px; float: right">Buttons</p>
+                                            <p id="fps" style="width:72px; height:18px; margin:8px; font-size:14px; float: right"></p>
+                                            <p id="current-control" style="width:225px; height:18px; margin:8px; font-size:14px; float: right">Buttons</p>
                                     </div>
                             </div>
                             <div id="myControls">
@@ -81,6 +82,8 @@
         let interval;
         let urlObject;
         let isCameraFrameReceived = false;
+        var startTime, endTime, frameCount = 0;
+        const fpsDisplay = document.getElementById('fps');
         const checkbox = document.getElementById('switchControls');
         const currentControl = document.getElementById("current-control");
         const buttonControls = document.getElementById("button-control");
@@ -100,6 +103,25 @@
             if(loader.style.display === "none"){
                 loader.style.display="block";
             }
+        }
+        // Function to calculate FPS
+        function fpsCalculate(){
+                // Measure time and calculate FPS
+                if(!startTime){
+                        startTime = performance.now();
+                } else {
+                        endTime = performance.now();
+                        frameCount++;
+                        var elapsedSeconds = (endTime - startTime) / 1000;
+                        if(elapsedSeconds>=1){
+                                var fps = frameCount / elapsedSeconds;
+                                var currentFPS = fps.toFixed(1) + " FPS";
+                                fpsDisplay.textContent=currentFPS;
+                                // Reset variables for the next second;
+                                startTime = endTime;
+                                frameCount = 0;
+                        }
+                }
         }
 
         //Camera WebSocket:
@@ -148,6 +170,7 @@
                 }
                 urlObject = URL.createObjectURL(new Blob([arrayBuffer]));
                 img.src = urlObject;
+                fpsCalculate();
             }else if (!isStreaming){
                 img.src="";
                 if(loader.style.display === "none"){
