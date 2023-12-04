@@ -74,6 +74,7 @@ void setSensor(){
   s->set_special_effect(s, special_effect);
   s->set_wb_mode(s, wb_mode);
   s->set_ae_level(s, ae_level);
+  delay(100);
 }
 void initialCameraConfig(){
   initConfig.ledc_channel = LEDC_CHANNEL_0;
@@ -178,11 +179,18 @@ void setup() {
     if(WiFi.RSSI() < -65){//Weak WiFi
       initConfig.frame_size = FRAMESIZE_CIF;//CIF,VGA,SVGA
       initConfig.jpeg_quality = 18;//0-63, 0 highest - 63 lowest
-      initConfig.fb_count = 1;
+      initConfig.fb_count = 2;
       Serial.print("RSSI: ");
       Serial.print(WiFi.RSSI());
-      Serial.println(", Frame Size: CIF, Quality: 18, FB Count: 1");
-    } else if(WiFi.RSSI() >= -65 && WiFi.RSSI() <= -48){//Good WiFi
+      Serial.println(", Frame Size: CIF, Quality: 18, FB Count: 2");
+    } else if(WiFi.RSSI() >= -65 && WiFi.RSSI() <= -55){//Decent WiFi
+      initConfig.frame_size = FRAMESIZE_VGA;//CIF,VGA,SVGA
+      initConfig.jpeg_quality = 20;//0-63, 0 highest - 63 lowest
+      initConfig.fb_count = 2;
+      Serial.print("RSSI: ");
+      Serial.print(WiFi.RSSI());
+      Serial.println(", Frame Size: VGA, Quality: 20, FB Count: 2");
+    } else if(WiFi.RSSI() >= -54 && WiFi.RSSI() <= -48){//Good WiFi
       initConfig.frame_size = FRAMESIZE_VGA;//CIF,VGA,SVGA
       initConfig.jpeg_quality = 16;//0-63, 0 highest - 63 lowest
       initConfig.fb_count = 2;
@@ -190,12 +198,12 @@ void setup() {
       Serial.print(WiFi.RSSI());
       Serial.println(", Frame Size: VGA, Quality: 16, FB Count: 2");
     } else if(WiFi.RSSI() > -47){//Very Strong WiFi
-      initConfig.frame_size = FRAMESIZE_VGA;//CIF,VGA,SVGA
-      initConfig.jpeg_quality = 10;//0-63, 0 highest - 63 lowest
+      initConfig.frame_size = FRAMESIZE_SVGA;//CIF,VGA,SVGA
+      initConfig.jpeg_quality = 18;//0-63, 0 highest - 63 lowest
       initConfig.fb_count = 2;
       Serial.print("RSSI: ");
       Serial.print(WiFi.RSSI());
-      Serial.println(", Frame Size: VGA, Quality: 10, FB Count: 2");
+      Serial.println(", Frame Size: SVGA, Quality: 18, FB Count: 2");
     }
   } else {
     if(WiFi.RSSI() < -65){//Weak WiFi
@@ -214,11 +222,11 @@ void setup() {
       Serial.println(", Frame Size: CIF, Quality: 20, FB Count: 1");
     } else if(WiFi.RSSI() > -47){//Very Strong WiFi
      initConfig.frame_size = FRAMESIZE_CIF;//CIF,VGA,SVGA
-     initConfig.jpeg_quality = 25;//0-63, 0 highest - 63 lowest
+     initConfig.jpeg_quality = 15;//0-63, 0 highest - 63 lowest
      initConfig.fb_count = 1;
       Serial.print("RSSI: ");
       Serial.print(WiFi.RSSI());
-      Serial.println(", Frame Size: CIF, Quality: 25, FB Count: 1");
+      Serial.println(", Frame Size: CIF, Quality: 15, FB Count: 1");
     }
   }
   // camera init
@@ -343,14 +351,14 @@ void loop() {
       return;
     }
 
-    if(fb->format != PIXFORMAT_JPEG){
-      Serial.println("Non-JPEG data not implemented");
-      return;
-    }
+    // if(fb->format != PIXFORMAT_JPEG){
+    //   Serial.println("Non-JPEG data not implemented");
+    //   return;
+    // }
   
     cameraClient.sendBinary((const char*) fb->buf, fb->len);
     esp_camera_fb_return(fb);
-    delay(20);
+    delay(5);
   }
   if(controlClient.available()){
     controlClient.poll();
