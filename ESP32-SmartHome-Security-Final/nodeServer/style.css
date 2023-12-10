@@ -16,6 +16,11 @@ body {
     margin: 0 auto;
     padding: 0;
 }
+div#rectangular-switch {
+    width:400px;
+    margin:0 auto;
+    text-align: left;
+}
 div#divider{
     display: flex;
     flex-direction: row;
