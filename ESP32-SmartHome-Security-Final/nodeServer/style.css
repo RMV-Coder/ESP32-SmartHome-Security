@@ -90,6 +90,20 @@ img {
 p {
     font-family: Source Code Pro;
 }
+p#fps {
+    width:72px;
+    height:18px;
+    margin:8px;
+    font-size:14px;
+    float: right;
+}
+p#current-control {
+    width:225px;
+    height:18px;
+    margin:8px;
+    font-size:14px;
+    float: right;
+}
 .blank { grid-area: blank; visibility: hidden;}
 #upButton { grid-area: up; }
 #downButton { grid-area: down; }
