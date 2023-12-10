@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartHome Security</title>
-    <link rel="stylesheet" href="style.css">
-    <link href='https://fonts.googleapis.com/css?family=K2D' rel='stylesheet'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet'>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartHome Surveillance System</title>
+<link rel="stylesheet" href="style.css">
+<link href='https://fonts.googleapis.com/css?family=K2D' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet'>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
     <div id="wrapper">
         <ul>
-            <li style="float: left;"><a id="linkTitle" href="/client.html">SmartHome Security</a></li>
-            <li><a class = "navigationLink" href="https://github.com/RMV-Coder/ESP32-SmartHome-Security" target="_blank">Project Files</a></li>
+            <li style="float: left;">
+                <a id="linkTitle"href="/client.html">SmartHome Surveillance System</a>
+            </li>
+            <li>
+                <a class = "navigationLink" 
+                    href ="https://github.com/RMV-Coder/ESP32-SmartHome-Security"
+                    target="_blank">Project Files</a>
+            </li>
             <li><a class = "navigationLink" href="/about.html">About</a></li>
         </ul>
         <div id="divider">
@@ -36,41 +42,60 @@
         <div id="myControls">
             <div id="slide-control" style="display:none">
                 <p> Pan Value: <span id="currentPan">0</span></p>
-                <input type="range" min="0" max="180" value="0" step="1" class="rangeSlider" id="camPan">
+                <input type="range" min="0" max="180" 
+                    value="0" step="1" class="rangeSlider" id="camPan">
                 <p> Tilt Value: <span id="currentTilt">0</span></p>
-                <input type="range" min="0" max="75" value="0" step="1" class="rangeSlider" id="camTilt">
+                <input type="range" min="0" max="75" 
+                    value="0" step="1" class="rangeSlider" id="camTilt">
             </div>
             <div id="button-control" style="display: block;">
                 <div class="controls">
-                    <button id="captureButton" onclick="captureImage()" style="background-color: grey;">
+                    <button id="captureButton" onclick="captureImage()" 
+                        style="background-color: grey;">
                         <i class="material-icons icon">photo_camera</i>
                     </button>
-                    <button id="upButton" onmousedown="handlePress(event)" onmouseup="handleRelease()" style="background-color: grey;">
+                    <button id="upButton" 
+                        onmousedown="handlePress(event)" 
+                        onmouseup="handleRelease()" 
+                        style="background-color: grey;">
                         <i class="material-icons icon">keyboard_arrow_up</i>
                     </button>
-                    <button id="espButton" onclick="espRestart();" style="background-color: grey;">
+                    <button id="espButton" onclick="espRestart();" 
+                        style="background-color: grey;">
                         <i class="material-icons icon" id="espIcon">power_settings_new</i>
                     </button>
                 </div>
                 <div class="controls">
-                    <button id="leftButton" onmousedown="handlePress(event)" onmouseup="handleRelease()" style="background-color: grey;">
+                    <button id="leftButton" 
+                        onmousedown="handlePress(event)" 
+                        onmouseup="handleRelease()" 
+                        style="background-color: grey;">
                         <i class="material-icons icon">keyboard_arrow_left</i>
                     </button>
-                    <button id="resetButton" onclick="resetCam()" style="background-color: grey;">
+                    <button id="resetButton" onclick="resetCam()" 
+                        style="background-color: grey;">
                         <i class="material-icons icon">restart_alt</i>
                     </button>
-                    <button id="rightButton" onmousedown="handlePress(event)" onmouseup="handleRelease()" style="background-color: grey;">
+                    <button id="rightButton" 
+                        onmousedown="handlePress(event)" 
+                        onmouseup="handleRelease()" 
+                        style="background-color: grey;">
                         <i class="material-icons icon">keyboard_arrow_right</i>
                     </button>
                 </div>
                 <div class="controls">
-                    <button id="startStreamButton" onclick="startStreaming()" style="background-color: grey;">
+                    <button id="startStreamButton" onclick="startStreaming()" 
+                        style="background-color: grey;">
                         <i class="material-icons icon">play_circle</i>
                     </button>
-                    <button id="downButton" onmousedown="handlePress(event)" onmouseup="handleRelease()" style="background-color: grey;">
+                    <button id="downButton" 
+                        onmousedown="handlePress(event)" 
+                        onmouseup="handleRelease()" 
+                        style="background-color: grey;">
                         <i class="material-icons icon">keyboard_arrow_down</i>
                     </button>
-                    <button id="stopStreamButton" onclick="stopStreaming()" style="background-color: grey;">
+                    <button id="stopStreamButton" onclick="stopStreaming()" 
+                        style="background-color: grey;">
                         <i class="material-icons icon">stop_circle</i>
                     </button>
                 </div>
@@ -137,13 +162,13 @@ function fpsCalculate(){
 }
 //Camera WebSocket:
 cameraWebSocket.onopen = () => {
-    console.log('Connection to the SmartHome Security Camera WebSocket Server opened');
+    console.log('Connection to Camera WebSocket Server opened');
     messageCounter++;
     let message = document.createElement("p");
     message.className = "reload-message";
     message.id=`message${messageCounter}`;
     message.style.color="whitesmoke";
-    message.textContent="Connection to the SmartHome Security Camera WebSocket Server opened";
+    message.textContent="Connection to Camera WebSocket Server opened";
     terminal.appendChild(message);
     message.scrollIntoView({behavior:"auto"});
     if(buttonControls.style.display === "none"){
@@ -190,13 +215,13 @@ cameraWebSocket.onmessage = (event) => {
     }
 };
 cameraWebSocket.onclose = (event) => {
-    console.log('WebSocket connection to SmartHome Security Camera WebSocket Server has been closed: ', event);
+    console.log('Connection to Camera WebSocket Server has been closed: ', event);
     messageCounter++;
     let message = document.createElement("p");
     message.className = "reload-message";
     message.id=`message${messageCounter}`;
     message.style.color="red";
-    message.textContent="Connection to the SmartHome Security Camera WebSocket Server has been closed.";
+    message.textContent="Connection to Camera WebSocket Server has been closed.";
     terminal.appendChild(message);
     message.scrollIntoView({behavior:"auto"});
     if(loader.style.display === "none"){
@@ -208,13 +233,13 @@ cameraWebSocket.onclose = (event) => {
 //Control WebSocket:
 const controlWebSocket = new WebSocket(`ws://${externalIP}:${WS_Port}/control`);
 controlWebSocket.onopen = () => {
-    console.log('WebSocket connection to SmartHome Security Control WebSocket Server opened');
+    console.log('WebSocket connection to Control WebSocket Server opened');
     messageCounter++;
     let message = document.createElement("p");
     message.className = "reload-message";
     message.id=`message${messageCounter}`;
     message.style.color="whitesmoke";
-    message.textContent="Connection to the SmartHome Security Control WebSocket Server opened.";
+    message.textContent="Connection to Control WebSocket Server opened.";
     terminal.appendChild(message);
     message.scrollIntoView({behavior:"auto"});
 };
@@ -237,7 +262,7 @@ controlWebSocket.onclose = (event) => {
     reloadMessage.className = "reload-message";
     reloadMessage.id=`message${messageCounter}`;
     reloadMessage.style.color="red";
-    reloadMessage.textContent="Connection to the SmartHome Security Control WebSocket Server has been closed. Please refresh the page to reconnect.";
+    reloadMessage.textContent="Connection has been closed.";
     terminal.appendChild(reloadMessage);
     reloadMessage.scrollIntoView({behavior:"auto"});
     location.reload();
