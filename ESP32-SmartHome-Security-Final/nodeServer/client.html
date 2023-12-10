@@ -24,13 +24,13 @@
                                     </div>
                                     <img src="" id="stream">
                                     <!-- Rectangular Switch -->
-                                    <div style="width:400px; margin:0 auto; text-align: left">
+                                    <div id="rectangular-switch">
                                             <label class="switch">
                                                     <input type="checkbox" id="switchControls" style="float:left">
                                                     <span class="slider"></span>
                                             </label>
-                                            <p id="fps" style="width:72px; height:18px; margin:8px; font-size:14px; float: right"></p>
-                                            <p id="current-control" style="width:225px; height:18px; margin:8px; font-size:14px; float: right">Buttons</p>
+                                            <p id="fps"></p>
+                                            <p id="current-control">Buttons</p>
                                     </div>
                             </div>
                             <div id="myControls">
@@ -39,8 +39,6 @@
                                         <input type="range" min="0" max="180" value="0" step="1" class="rangeSlider" id="camPan">
                                         <p> Tilt Value: <span id="currentTilt">0</span></p>
                                         <input type="range" min="0" max="75" value="0" step="1" class="rangeSlider" id="camTilt">
-                                <!--<p> Flash Value: <span id="currentFlash">0</span></p>
-                                <input type="range" min="0" max="10" value="0" step="1" class="rangeSlider" id="camFlash">-->
                                 </div>
                                 <div id="button-control" style="display: block;">
                                         <div class="controls">
@@ -248,13 +246,10 @@
 
         let panSlider = document.getElementById("camPan");
         let tiltSlider= document.getElementById("camTilt");
-        //let flashSlider = document.getElementById("camFlash");
         let panOutput = document.getElementById("currentPan");
         let tiltOutput= document.getElementById("currentTilt");
-        //let flashOutput= document.getElementById("currentFlash");
         panOutput.innerHTML = panSlider.value;
         tiltOutput.innerHTML = tiltSlider.value;
-        //flashOutput.innerHTML = flashSlider.value;
         panSlider.onchange = function() {
             panOutput.textContent = this.value;
             panValue = this.value;
